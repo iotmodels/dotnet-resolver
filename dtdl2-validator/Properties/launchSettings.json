@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "dtdl2-validator": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\test\\demodevice.json"
+    }
+  }
+}
