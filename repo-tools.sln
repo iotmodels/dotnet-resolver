@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dtdl2-validator", "dtdl2-va
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "resolvers", "resolvers\resolvers.csproj", "{98FCBAA6-8593-47F8-9856-66E3BFFDA73F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{91B4CF27-179A-48FD-A1A9-57BCBB21DA02}"
+	ProjectSection(SolutionItems) = preProject
+		test\demodevice.json = test\demodevice.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.DigitalTwins.Parser;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,21 +8,31 @@ namespace IoTModels.Resolvers
 {
     public static class LocalFolderResolver
     {
-        const string baseFolder = "_models_";
+        const string baseFolder = "models";
         static IDictionary<string, string> index = new Dictionary<string, string>();
         static LocalFolderResolver()
         {
             if (!Directory.Exists(baseFolder))
             {
-                Directory.CreateDirectory(baseFolder);
+                Console.WriteLine($"ERROR. BaseFolder '{baseFolder}' not found.");
             }
-            foreach (var file in Directory.GetFiles(baseFolder))
-            {
-                (string dtmi, string content) = LightParser.SemiParse(file);
-                index.Add(dtmi, content);
-            }
-
+            TraverseDir(new DirectoryInfo(baseFolder));
         }
+
+        static void TraverseDir(DirectoryInfo di)
+        {
+            foreach (var subfolder in di.EnumerateDirectories())
+            {
+                foreach (var file in subfolder.GetFiles("*.json"))
+                {
+                    (string dtmi, string content) = LightParser.SemiParse(file.FullName);
+                    index.Add(dtmi, content);
+                    Console.WriteLine($"Found {dtmi} in local folder {subfolder.FullName}");
+                }
+                TraverseDir(subfolder);
+            }
+        }
+
         static public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
             List<string> resolvedModels = new List<string>();
