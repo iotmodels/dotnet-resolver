@@ -1,13 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>dtdl2_validator</RootNamespace>
+    <PackAsTool>true</PackAsTool>
+    <PackageType>DotNetCliTool</PackageType>
+    <Version>0.0.1</Version>
+    <Authors>ridomin</Authors>
+    <Company />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\resolvers\resolvers.csproj" />
   </ItemGroup>
 
 </Project>

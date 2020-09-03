@@ -4,10 +4,10 @@
   "@type": "Interface",
   "displayName": "demodevice",
   "contents": [
-    { 
-      "@type" : "Component", 
-      "name" : "c1", 
-      "schema" : "dtmi:company:toryan;1" 
+    {
+      "@type": "Component",
+      "name": "c1",
+      "schema": "dtmi:dev:rido:demo;1"
     },
     {
       "@type": "Telemetry",
