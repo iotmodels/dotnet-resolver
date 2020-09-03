@@ -36,14 +36,17 @@ namespace dtdl2_validator
                     Console.WriteLine(item.Id);
                 }
                 Console.WriteLine($"\nValidation Passed: {input}");
+                Environment.Exit(0);
             }
             catch (ResolutionException rex)
             {
                 Console.WriteLine(rex.ToString());
+                Environment.Exit(-1);
             }
             catch (ParsingException pex)
             {
                 Console.WriteLine(pex.ToString());
+                Environment.Exit(-1);
             }
         }
 
