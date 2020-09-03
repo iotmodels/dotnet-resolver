@@ -3,6 +3,7 @@ using Microsoft.Azure.DigitalTwins.Parser;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -27,11 +28,14 @@ namespace dtdl2_validator
             try
             {
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
-                Console.WriteLine($"\nValidation Passed: {input}");
-                foreach (var item in parserResult.Values)
+                Console.WriteLine("Resolution completed\n\n");
+                foreach (var item in parserResult.Values
+                    .Where(v => v.EntityKind == DTEntityKind.Interface 
+                             || v.EntityKind == DTEntityKind.Component))
                 {
                     Console.WriteLine(item.Id);
                 }
+                Console.WriteLine($"\nValidation Passed: {input}");
             }
             catch (ResolutionException rex)
             {
@@ -45,7 +49,7 @@ namespace dtdl2_validator
 
         private static void PrintHeader(string input, string resolver)
         {
-            Console.WriteLine("-----------------------------------");
+            Console.WriteLine("\n-----------------------------------");
             Console.WriteLine($"dtdl2-validator {input} {resolver}");
             Console.WriteLine($"version: {ThisAssemblyVersion} using parser: {ThisParserVersion}");
             Console.WriteLine("-----------------------------------");
@@ -63,6 +67,11 @@ namespace dtdl2_validator
             input = args[0];
             if (args.Length > 1)
             {
+                if (!File.Exists(input))
+                {
+                    Console.WriteLine($"File '{input}' not found");
+                    System.Environment.Exit(1);
+                }
                 if (args[1]=="local")
                 {
                     resolver = "local";
