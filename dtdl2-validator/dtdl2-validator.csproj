@@ -10,8 +10,4 @@
     <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.8.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\iotmodels-resolver\iotmodels-resolver.csproj" />
-  </ItemGroup>
-
 </Project>

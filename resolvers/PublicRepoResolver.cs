@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace iotmodels_resolver
+namespace IoTModels.Resolvers
 {
     class modelindexitem
     {
@@ -15,7 +15,7 @@ namespace iotmodels_resolver
 
     public static class PublicRepoResolver
     {
-        const  string modelRepoUrl = "https://iotmodels.github.io/registry/";
+        const string modelRepoUrl = "https://iotmodels.github.io/registry/";
         static WebClient wc = new WebClient();
         static IDictionary<string, modelindexitem> index;
 

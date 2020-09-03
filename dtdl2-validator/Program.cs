@@ -1,4 +1,4 @@
-﻿using iotmodels_resolver;
+﻿using IoTModels.Resolvers;
 using Microsoft.Azure.DigitalTwins.Parser;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>iotmodels_resolver</RootNamespace>
+    <RootNamespace>IoTModels.Resolvers</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
