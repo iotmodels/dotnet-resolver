@@ -13,13 +13,13 @@ namespace IoTModels.Resolvers
         public string[] depends { get; set; }
     }
 
-    public static class PublicRepoResolver
+    public class PublicRepoResolver : IResolver
     {
         const string modelRepoUrl = "https://iotmodels.github.io/registry/";
         static WebClient wc = new WebClient();
         static IDictionary<string, modelindexitem> index;
 
-        static PublicRepoResolver()
+        public PublicRepoResolver()
         {
             Console.Write("Downloading Index.. ");
             var modelIndexJson = wc.DownloadString(modelRepoUrl + "model-index.json");
@@ -27,7 +27,7 @@ namespace IoTModels.Resolvers
             Console.WriteLine(".. Loaded !!");
         }
 
-        static public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
+        public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)

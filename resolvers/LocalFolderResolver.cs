@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
 {
-    public static class LocalFolderResolver
+    public class LocalFolderResolver : IResolver
     {
         const string baseFolder = "models";
-        static IDictionary<string, string> index = new Dictionary<string, string>();
-        static LocalFolderResolver()
+        IDictionary<string, string> index = new Dictionary<string, string>();
+        public LocalFolderResolver()
         {
             if (!Directory.Exists(baseFolder))
             {
@@ -19,7 +19,7 @@ namespace IoTModels.Resolvers
             TraverseDir(new DirectoryInfo(baseFolder));
         }
 
-        static void TraverseDir(DirectoryInfo di)
+        void TraverseDir(DirectoryInfo di)
         {
             foreach (var subfolder in di.EnumerateDirectories())
             {
@@ -33,7 +33,7 @@ namespace IoTModels.Resolvers
             }
         }
 
-        static public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
+        public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)

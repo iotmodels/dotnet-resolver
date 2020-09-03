@@ -35,18 +35,22 @@ namespace dtdl2_validator
             Environment.Exit(validationResult);
         }
 
-        private static async Task<int> ValidateAsync(string input, string resolver)
+        private async Task<int> ValidateAsync(string input, string resolver)
         {
             ModelParser parser = new ModelParser();
             if (resolver != "none")
             {
                 if (resolver == "local")
                 {
-                    parser.DtmiResolver = LocalFolderResolver.DtmiResolver;
+                    parser.DtmiResolver = new LocalFolderResolver().DtmiResolver;
                 }
-                else
+                else if (resolver=="private")
                 {
-                    parser.DtmiResolver = PublicRepoResolver.DtmiResolver;
+                    parser.DtmiResolver = new PrivateRepoResolver(config).DtmiResolver;
+                }
+                else 
+                {
+                    parser.DtmiResolver = new PublicRepoResolver().DtmiResolver;
                 }
             }
             try
@@ -75,7 +79,7 @@ namespace dtdl2_validator
         }
 
 
-        private static void PrintHeader(string input, string resolver)
+        private void PrintHeader(string input, string resolver)
         {
             Console.WriteLine("\n-----------------------------------");
             Console.WriteLine($"dtdl2-validator {input} {resolver}");
@@ -83,7 +87,7 @@ namespace dtdl2_validator
             Console.WriteLine("-----------------------------------");
         }
 
-        static (string, string) ReadConfiguration(IConfiguration config)
+        (string, string) ReadConfiguration(IConfiguration config)
         {
             string input = config.GetValue<string>("f");
             string resolver = config.GetValue<string>("resolver"); ;
@@ -102,19 +106,7 @@ namespace dtdl2_validator
                 }
             }
             
-            if (!string.IsNullOrEmpty(resolver))
-            {
-                if (resolver == "local")
-                {
-                    resolver = "local";
-                }
-                else
-                {
-                    Console.WriteLine("Unknown resolver:" + resolver);
-                    resolver = "public";
-                }
-            }
-            else
+            if (string.IsNullOrEmpty(resolver))
             {
                 resolver = "public";
             }

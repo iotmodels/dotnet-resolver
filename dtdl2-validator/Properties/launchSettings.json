@@ -1,8 +1,23 @@
 {
   "profiles": {
-    "dtdl2-validator": {
+    "default-resolver": {
       "commandName": "Project",
       "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json"
+    },
+    "public-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=public"
+    },
+    "none-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=none"
+    },
+    "private-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=private",
+      "environmentVariables": {
+        "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=contosomodels;AccountKey=UxpVYHpDpwQBEtUMUAu/zj7rT1uxnXFjDqMwnWlyf11yt/LEe/lvE07NgfgfzNwnvDElx6vlPkUevXTeZl7lXA==;EndpointSuffix=core.windows.net"
+      }
     }
   }
 }
