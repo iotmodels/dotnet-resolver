@@ -12,6 +12,9 @@ namespace dtdl2_validator
         static async Task Main(string[] args)
         {
             string input = ValidateInput(args);
+            Console.WriteLine("------------------------");
+            Console.WriteLine("dtdl2-validator " + input);
+            Console.WriteLine("------------------------");
             ModelParser parser = new ModelParser();
             parser.DtmiResolver = PublicRepoResolver.DtmiResolver;
             try
