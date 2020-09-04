@@ -32,12 +32,12 @@ namespace IoTModels.Resolvers
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
             containerClient = blobServiceClient.GetBlobContainerClient("models");
-            Console.WriteLine("Downloading index from blob storage");
+            Console.Write("Downloading Index from " + containerClient.AccountName);
             var dlIndex = await containerClient.GetBlobClient("model-index.json").DownloadAsync();
             using (var sr = new StreamReader(dlIndex.Value.Content))
             {
                 index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(sr.ReadToEnd());
-                Console.WriteLine("Loaded index with : " + index.Count);
+                Console.WriteLine(".. Loaded !!");
             }
         }
 

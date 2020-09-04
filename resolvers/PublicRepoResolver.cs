@@ -21,7 +21,7 @@ namespace IoTModels.Resolvers
             {
                 modelRepoUrl = "https://iotmodels.github.io/registry/";
             }
-            Console.Write("Downloading Index.. ");
+            Console.Write("Downloading Index from " + modelRepoUrl);
             var modelIndexJson = wc.DownloadString(modelRepoUrl + "model-index.json");
             index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(modelIndexJson);
             Console.WriteLine(".. Loaded !!");
