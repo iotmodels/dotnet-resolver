@@ -4,6 +4,10 @@
       "commandName": "Project",
       "commandLineArgs": "/f=../../../../test/demodevice.json"
     },
+    "none-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=none"
+    },
     "public-resolver": {
       "commandName": "Project",
       "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public"
@@ -14,11 +18,7 @@
     },
     "local-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/models"
-    },
-    "none-resolver": {
-      "commandName": "Project",
-      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=none"
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/models /Logging:Console:LogLevel:Default=Trace"
     },
     "private-resolver": {
       "commandName": "Project",

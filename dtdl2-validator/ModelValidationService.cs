@@ -21,7 +21,7 @@ namespace dtdl2_validator
         readonly ILogger<ModelValidationService> log;
         readonly IConfiguration config;
 
-        public ModelValidationService(ILogger<ModelValidationService> logger, IConfiguration configuration)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
         {
             this.log = logger;
             this.config = configuration;
@@ -42,15 +42,15 @@ namespace dtdl2_validator
             {
                 if (resolver == "local")
                 {
-                    parser.DtmiResolver = new LocalFolderResolver(config).DtmiResolver;
+                    parser.DtmiResolver = new LocalFolderResolver(config, log).DtmiResolver;
                 }
                 else if (resolver=="private")
                 {
-                    parser.DtmiResolver = new PrivateRepoResolver(config).DtmiResolver;
+                    parser.DtmiResolver = new PrivateRepoResolver(config, log).DtmiResolver;
                 }
                 else 
                 {
-                    parser.DtmiResolver = new PublicRepoResolver(config).DtmiResolver;
+                    parser.DtmiResolver = new PublicRepoResolver(config, log).DtmiResolver;
                 }
             }
             try

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.DigitalTwins.Parser;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ namespace IoTModels.Resolvers
         static WebClient wc = new WebClient();
         static IDictionary<string, modelindexitem> index;
         string modelRepoUrl;
-
-        public PublicRepoResolver(IConfiguration config)
+        ILogger logger;
+        public PublicRepoResolver(IConfiguration config, ILogger log)
         {
+            logger = log;
             modelRepoUrl = config.GetValue<string>("modelRepoUrl");
             if (string.IsNullOrEmpty(modelRepoUrl))
             {
@@ -35,9 +37,8 @@ namespace IoTModels.Resolvers
                 if (index.ContainsKey(dtmi.AbsoluteUri))
                 {
                     string url = modelRepoUrl + index[dtmi.AbsoluteUri].path;
-                    Console.WriteLine("Downloading definition");
                     resolvedModels.Add(wc.DownloadString(url));
-                    Console.WriteLine("OK " + url);
+                    logger.LogTrace("OK " + url);
                 }
             }
             return await Task.FromResult(resolvedModels);

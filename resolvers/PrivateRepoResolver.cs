@@ -3,6 +3,7 @@ using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using Microsoft.Azure.DigitalTwins.Parser;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,10 @@ namespace IoTModels.Resolvers
         string storageConnectionString;
         BlobContainerClient containerClient;
         IDictionary<string, modelindexitem> index;
-        public PrivateRepoResolver(IConfiguration config)
+        ILogger logger;
+        public PrivateRepoResolver(IConfiguration config, ILogger log)
         {
+            this.logger = log;
             storageConnectionString = config.GetValue<string>("StorageConnectionString");
             if (string.IsNullOrEmpty(storageConnectionString))
             {
@@ -49,13 +52,12 @@ namespace IoTModels.Resolvers
                 if (index.ContainsKey(dtmi.AbsoluteUri))
                 {
                     string path = index[dtmi.AbsoluteUri].path;
-                    Console.WriteLine("Downloading definition");
                     var dlModel = await containerClient.GetBlobClient(path).DownloadAsync();
                     using (var sr = new StreamReader(dlModel.Value.Content))
                     {
                         resolvedModels.Add(sr.ReadToEnd());
                     }
-                    Console.WriteLine("OK " + path);
+                    logger.LogTrace("OK " + path);
                 }
             }
             return await Task.FromResult(resolvedModels);

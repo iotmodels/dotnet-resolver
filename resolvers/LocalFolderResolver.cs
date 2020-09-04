@@ -23,19 +23,17 @@ namespace IoTModels.Resolvers
             {
                 baseFolder = "models";
             }
-
-            Console.WriteLine(new DirectoryInfo(baseFolder).FullName);
             if (!Directory.Exists(baseFolder))
             {
                 Console.WriteLine($"ERROR. BaseFolder '{baseFolder}' not found.");
             }
+            logger.LogInformation("Loading models from: " + baseFolder);
             TraverseDir(new DirectoryInfo(baseFolder));
             
         }
 
         void TraverseDir(DirectoryInfo di)
         {
-            Console.Write("Building Index from " + di.FullName);
             foreach (var subfolder in di.EnumerateDirectories())
             {
                 foreach (var file in subfolder.GetFiles("*.json"))
@@ -47,7 +45,6 @@ namespace IoTModels.Resolvers
                 }
                 TraverseDir(subfolder);
             }
-            Console.WriteLine(".. Loaded !!");
         }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
