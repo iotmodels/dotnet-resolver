@@ -2,19 +2,27 @@
   "profiles": {
     "default-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json"
+      "commandLineArgs": "/f=../../../../test/demodevice.json"
     },
     "public-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=public"
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public"
+    },
+    "shared-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public /modelRepoUrl=https://raw.githubusercontent.com/ridomin/registry/master/"
+    },
+    "local-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/models"
     },
     "none-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=none"
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=none"
     },
     "private-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=..\\..\\..\\..\\test\\demodevice.json /resolver=private",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=private",
       "environmentVariables": {
         "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=contosomodels;AccountKey=UxpVYHpDpwQBEtUMUAu/zj7rT1uxnXFjDqMwnWlyf11yt/LEe/lvE07NgfgfzNwnvDElx6vlPkUevXTeZl7lXA==;EndpointSuffix=core.windows.net"
       }

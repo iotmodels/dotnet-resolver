@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.DigitalTwins.Parser;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,17 @@ namespace IoTModels.Resolvers
 {
     public class PublicRepoResolver : IResolver
     {
-        const string modelRepoUrl = "https://iotmodels.github.io/registry/";
         static WebClient wc = new WebClient();
         static IDictionary<string, modelindexitem> index;
+        string modelRepoUrl;
 
-        public PublicRepoResolver()
+        public PublicRepoResolver(IConfiguration config)
         {
+            modelRepoUrl = config.GetValue<string>("modelRepoUrl");
+            if (string.IsNullOrEmpty(modelRepoUrl))
+            {
+                modelRepoUrl = "https://iotmodels.github.io/registry/";
+            }
             Console.Write("Downloading Index.. ");
             var modelIndexJson = wc.DownloadString(modelRepoUrl + "model-index.json");
             index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(modelIndexJson);

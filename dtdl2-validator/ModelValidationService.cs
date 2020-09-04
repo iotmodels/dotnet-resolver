@@ -42,7 +42,7 @@ namespace dtdl2_validator
             {
                 if (resolver == "local")
                 {
-                    parser.DtmiResolver = new LocalFolderResolver().DtmiResolver;
+                    parser.DtmiResolver = new LocalFolderResolver(config).DtmiResolver;
                 }
                 else if (resolver=="private")
                 {
@@ -50,7 +50,7 @@ namespace dtdl2_validator
                 }
                 else 
                 {
-                    parser.DtmiResolver = new PublicRepoResolver().DtmiResolver;
+                    parser.DtmiResolver = new PublicRepoResolver(config).DtmiResolver;
                 }
             }
             try
@@ -94,7 +94,7 @@ namespace dtdl2_validator
 
             if (string.IsNullOrEmpty(input))
             {
-                Console.WriteLine("Usage: dtdl2-validator /f=<dtdlFile.json> /resolver?=<local|public|none>");
+                Console.WriteLine("Usage: dtdl2-validator /f=<dtdlFile.json> /resolver?=<public|private|local|none>");
                 System.Environment.Exit(-1);
             }
             else
