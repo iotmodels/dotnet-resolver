@@ -7,12 +7,6 @@ using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
 {
-    class modelindexitem
-    {
-        public string path { get; set; }
-        public string[] depends { get; set; }
-    }
-
     public class PublicRepoResolver : IResolver
     {
         const string modelRepoUrl = "https://iotmodels.github.io/registry/";

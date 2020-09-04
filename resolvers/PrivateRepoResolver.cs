@@ -14,12 +14,6 @@ namespace IoTModels.Resolvers
 {
     public class PrivateRepoResolver : IResolver
     {
-        class modelindexitem
-        {
-            public string path { get; set; }
-            public string[] depends { get; set; }
-        }
-
         string storageConnectionString;
         BlobContainerClient containerClient;
         IDictionary<string, modelindexitem> index;
@@ -28,7 +22,7 @@ namespace IoTModels.Resolvers
             storageConnectionString = config.GetValue<string>("StorageConnectionString");
             if (string.IsNullOrEmpty(storageConnectionString))
             {
-                Console.WriteLine("ERROR: PrivateRepos require connectionstring 'StorageConnectionString'");
+                Console.WriteLine("ERROR: PrivateRepos require credentials via config 'StorageConnectionString'");
                 Environment.Exit(-1);
             }
             LoadIndex(storageConnectionString).Wait();

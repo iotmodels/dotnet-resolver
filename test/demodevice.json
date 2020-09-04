@@ -4,7 +4,7 @@
   "@type": "Interface",
   "displayName": "demodevice",
   "contents": [
-    {
+    {   
       "@type": "Component",
       "name": "c1",
       "schema": "dtmi:dev:rido:demo;1"
