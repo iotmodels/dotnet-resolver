@@ -12,8 +12,10 @@ namespace dtdl2_validator
             var host = Host.CreateDefaultBuilder(args)
               .ConfigureServices((hostContext, services) =>
                   services
+                    .AddSingleton<IResolver,LocalFolderResolver>()
                     .AddHostedService<ModelValidationService>()
-                    .AddSingleton<LocalFolderResolver>());
+                    );
+
             await host.RunConsoleAsync().ConfigureAwait(true);
             
         }

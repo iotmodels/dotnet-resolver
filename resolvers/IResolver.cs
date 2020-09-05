@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
 {
-    interface IResolver
+    public interface IResolver
     {
         Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis);
     }

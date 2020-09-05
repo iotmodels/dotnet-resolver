@@ -4,7 +4,7 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>default-resolver</ActiveDebugProfile>
-    <ShowAllFiles>true</ShowAllFiles>
+    <ActiveDebugProfile>local-resolver</ActiveDebugProfile>
+    <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
 </Project>

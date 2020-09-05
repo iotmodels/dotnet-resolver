@@ -1,12 +1,12 @@
-﻿using AngleSharp.Html.Dom.Events;
+﻿
 using IoTModels.Resolvers;
 using Microsoft.Azure.DigitalTwins.Parser;
-using Microsoft.Build.Framework;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,31 +20,33 @@ namespace dtdl2_validator
     {
         readonly ILogger<ModelValidationService> log;
         readonly IConfiguration config;
+        readonly IResolver resolver;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger, IResolver resolver)
         {
             this.log = logger;
             this.config = configuration;
+            this.resolver = resolver;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            (string input, string resolver) = ReadConfiguration(config);
-            PrintHeader(input, resolver);
-            int validationResult = await ValidateAsync(input, resolver);
+            (string input, string resolverName) = ReadConfiguration(config);
+            PrintHeader(input, resolverName);
+            int validationResult = await ValidateAsync(input, resolverName);
             Environment.Exit(validationResult);
         }
 
-        private async Task<int> ValidateAsync(string input, string resolver)
+        private async Task<int> ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
-            if (resolver != "none")
+            if (resolverName != "none")
             {
-                if (resolver == "local")
+                if (resolverName == "local")
                 {
-                    parser.DtmiResolver = new LocalFolderResolver(config, log).DtmiResolver;
+                    parser.DtmiResolver = resolver.DtmiResolver;
                 }
-                else if (resolver=="private")
+                else if (resolverName=="private")
                 {
                     parser.DtmiResolver = new PrivateRepoResolver(config, log).DtmiResolver;
                 }
