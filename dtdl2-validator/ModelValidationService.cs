@@ -40,21 +40,8 @@ namespace dtdl2_validator
         private async Task<int> ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
-            if (resolverName != "none")
-            {
-                if (resolverName == "local")
-                {
-                    parser.DtmiResolver = resolver.DtmiResolver;
-                }
-                else if (resolverName=="private")
-                {
-                    parser.DtmiResolver = new PrivateRepoResolver(config, log).DtmiResolver;
-                }
-                else 
-                {
-                    parser.DtmiResolver = new PublicRepoResolver(config, log).DtmiResolver;
-                }
-            }
+            ConfigureResolver(parser, resolverName);
+
             try
             {
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
@@ -80,6 +67,24 @@ namespace dtdl2_validator
             }
         }
 
+        private void ConfigureResolver(ModelParser parser, string resolverName)
+        {
+            if (resolverName != "none")
+            {
+                if (resolverName == "local")
+                {
+                    parser.DtmiResolver = resolver.DtmiResolver;
+                }
+                else if (resolverName == "private")
+                {
+                    parser.DtmiResolver = new PrivateRepoResolver(config, log).DtmiResolver;
+                }
+                else
+                {
+                    parser.DtmiResolver = new PublicRepoResolver(config, log).DtmiResolver;
+                }
+            }
+        }
 
         private void PrintHeader(string input, string resolver)
         {
