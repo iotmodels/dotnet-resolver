@@ -17,7 +17,6 @@ namespace dtdl2_validator
                     );
 
             await host.RunConsoleAsync().ConfigureAwait(true);
-            
         }
     }
 }

@@ -28,12 +28,24 @@ namespace IoTModels.Resolvers
                 Console.WriteLine($"ERROR. BaseFolder '{baseFolder}' not found.");
             }
             logger.LogInformation("Loading models from: " + baseFolder);
-            TraverseDir(new DirectoryInfo(baseFolder));
+            if (Directory.Exists(baseFolder))
+            { 
+                TraverseDir(new DirectoryInfo(baseFolder));
+            }
             
         }
 
         void TraverseDir(DirectoryInfo di)
         {
+            logger.LogTrace($"LocalFolderResolver traversing {di.FullName}");
+            foreach (var file in di.GetFiles("*.json"))
+            {
+                (string dtmi, string content) = SemiParse(file.FullName);
+                // TODO: handle dependencies
+                index.Add(dtmi, content);
+                logger.LogTrace($"{dtmi} in {di.FullName}");
+            }
+
             foreach (var subfolder in di.EnumerateDirectories())
             {
                 foreach (var file in subfolder.GetFiles("*.json"))

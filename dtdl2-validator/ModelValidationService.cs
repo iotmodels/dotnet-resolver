@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +34,7 @@ namespace dtdl2_validator
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
             int validationResult = await ValidateAsync(input, resolverName);
-            Environment.Exit(validationResult);
+            Environment.ExitCode = validationResult;
         }
 
         private async Task<int> ValidateAsync(string input, string resolverName)
@@ -44,13 +44,17 @@ namespace dtdl2_validator
 
             try
             {
+                parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
                 Console.WriteLine("Resolution completed\n\n");
-                foreach (var item in parserResult.Values
-                    .Where(v => v.EntityKind == DTEntityKind.Interface
-                             || v.EntityKind == DTEntityKind.Component))
+                foreach (var item in parserResult.Values)
                 {
-                    Console.WriteLine(item.Id);
+                    this.log.LogTrace(item.Id.AbsoluteUri);
+                    if (item.EntityKind == DTEntityKind.Interface
+                     || item.EntityKind == DTEntityKind.Component)
+                    {
+                        Console.WriteLine(item.Id.AbsoluteUri);
+                    }
                 }
                 Console.WriteLine($"\nValidation Passed: {input}");
                 return 0;
@@ -102,14 +106,14 @@ namespace dtdl2_validator
             if (string.IsNullOrEmpty(input))
             {
                 Console.WriteLine("Usage: dtdl2-validator /f=<dtdlFile.json> /resolver?=<public|private|local|none>");
-                System.Environment.Exit(-1);
+                Environment.ExitCode = -1;
             }
             else
             {
                 if (!File.Exists(input))
                 {
                     Console.WriteLine($"File '{input}' not found");
-                    System.Environment.Exit(-1);
+                    Environment.ExitCode = -1;
                 }
             }
             
