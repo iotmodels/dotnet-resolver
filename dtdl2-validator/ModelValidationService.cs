@@ -35,6 +35,7 @@ namespace dtdl2_validator
             PrintHeader(input, resolverName);
             int validationResult = await ValidateAsync(input, resolverName);
             Environment.ExitCode = validationResult;
+            return;
         }
 
         private async Task<int> ValidateAsync(string input, string resolverName)
