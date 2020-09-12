@@ -6,18 +6,24 @@
     <RootNamespace>dtdl2_validator</RootNamespace>
     <PackAsTool>true</PackAsTool>
     <PackageType>DotNetCliTool</PackageType>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <Authors>ridomin</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.DigitalTwins.Parser" Version="3.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\resolvers\resolvers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

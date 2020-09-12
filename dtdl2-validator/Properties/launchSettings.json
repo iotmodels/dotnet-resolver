@@ -1,8 +1,31 @@
 {
   "profiles": {
-    "dtdl2-validator": {
+    "default-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "..\\..\\..\\..\\test\\demodevice.json"
+      "commandLineArgs": "/f=../../../../test/demodevice.json"
+    },
+    "none-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=none"
+    },
+    "public-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public"
+    },
+    "shared-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public /modelRepoUrl=https://raw.githubusercontent.com/ridomin/registry/master/"
+    },
+    "local-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/dtmi /Logging:Console:LogLevel:Default=Trace"
+    },
+    "private-resolver": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=private",
+      "environmentVariables": {
+        "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=contosomodels;AccountKey=UxpVYHpDpwQBEtUMUAu/zj7rT1uxnXFjDqMwnWlyf11yt/LEe/lvE07NgfgfzNwnvDElx6vlPkUevXTeZl7lXA==;EndpointSuffix=core.windows.net"
+      }
     }
   }
 }

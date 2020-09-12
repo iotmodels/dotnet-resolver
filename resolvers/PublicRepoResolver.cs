@@ -1,4 +1,6 @@
 ﻿using Microsoft.Azure.DigitalTwins.Parser;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,38 +9,31 @@ using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
 {
-    class modelindexitem
+    public class PublicRepoResolver : IResolver
     {
-        public string path { get; set; }
-        public string[] depends { get; set; }
-    }
-
-    public static class PublicRepoResolver
-    {
-        const string modelRepoUrl = "https://iotmodels.github.io/registry/";
         static WebClient wc = new WebClient();
-        static IDictionary<string, modelindexitem> index;
-
-        static PublicRepoResolver()
+        
+        string modelRepoUrl;
+        ILogger logger;
+        public PublicRepoResolver(IConfiguration config, ILogger log)
         {
-            Console.Write("Downloading Index.. ");
-            var modelIndexJson = wc.DownloadString(modelRepoUrl + "model-index.json");
-            index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(modelIndexJson);
-            Console.WriteLine(".. Loaded !!");
+            logger = log;
+            modelRepoUrl = config.GetValue<string>("modelRepoUrl");
+            if (string.IsNullOrEmpty(modelRepoUrl))
+            {
+                modelRepoUrl = "https://iotmodels.github.io/registry/";
+            }
         }
 
-        static public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
+        public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)
             {
-                if (index.ContainsKey(dtmi.AbsoluteUri))
-                {
-                    string url = modelRepoUrl + index[dtmi.AbsoluteUri].path;
-                    Console.WriteLine("Downloading definition");
-                    resolvedModels.Add(wc.DownloadString(url));
-                    Console.WriteLine("OK " + url);
-                }
+                var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
+                string url = modelRepoUrl + path;
+                resolvedModels.Add(wc.DownloadString(url));
+                logger.LogTrace("OK " + url);
             }
             return await Task.FromResult(resolvedModels);
         }
