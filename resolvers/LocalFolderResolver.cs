@@ -15,7 +15,7 @@ namespace IoTModels.Resolvers
         IDictionary<string, string> index = new Dictionary<string, string>();
         ILogger logger;
 
-        public LocalFolderResolver(IConfiguration config, ILogger<LocalFolderResolver> log)
+        public LocalFolderResolver(IConfiguration config, ILogger log)
         {
             this.logger = log;
             var baseFolder = config.GetValue<string>("baseFolder");
