@@ -27,14 +27,9 @@ namespace IoTModels.Resolvers
                 Console.WriteLine("ERROR: PrivateRepos require credentials via config 'StorageConnectionString'");
                 Environment.Exit(-1);
             }
-            LoadIndex(storageConnectionString).Wait();
+            
         }
 
-        private async Task LoadIndex(string storageConnectionString)
-        {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
-            containerClient = blobServiceClient.GetBlobContainerClient("models");
-        }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
