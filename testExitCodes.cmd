@@ -1,0 +1,1 @@
+.\dtdl2-validator\bin\Debug\netcoreapp3.1\dtdl2-validator.exe /f=test/demodevice.json /resolver=local /baseFolder=../registry/dtmi

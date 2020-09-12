@@ -18,11 +18,11 @@ namespace dtdl2_validator
 {
     class ModelValidationService : BackgroundService
     {
-        readonly ILogger<ModelValidationService> log;
+        readonly ILogger log;
         readonly IConfiguration config;
         readonly IResolver resolver;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger, IResolver resolver)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
         {
             this.log = logger;
             this.config = configuration;
@@ -33,18 +33,14 @@ namespace dtdl2_validator
         {
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
-            int validationResult = await ValidateAsync(input, resolverName);
-            Environment.ExitCode = validationResult;
-            return;
+            await ValidateAsync(input, resolverName);
         }
 
-        private async Task<int> ValidateAsync(string input, string resolverName)
+        private async Task ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
             ConfigureResolver(parser, resolverName);
 
-            try
-            {
                 parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
                 Console.WriteLine("Resolution completed\n\n");
@@ -58,18 +54,6 @@ namespace dtdl2_validator
                     }
                 }
                 Console.WriteLine($"\nValidation Passed: {input}");
-                return 0;
-            }
-            catch (ResolutionException rex)
-            {
-                Console.WriteLine(rex.ToString());
-                return -1;
-            }
-            catch (ParsingException pex)
-            {
-                Console.WriteLine(pex.ToString());
-                return -2;
-            }
         }
 
         private void ConfigureResolver(ModelParser parser, string resolverName)
@@ -78,7 +62,7 @@ namespace dtdl2_validator
             {
                 if (resolverName == "local")
                 {
-                    parser.DtmiResolver = resolver.DtmiResolver;
+                    parser.DtmiResolver = new LocalFolderResolver(config, log).DtmiResolver;
                 }
                 else if (resolverName == "private")
                 {
