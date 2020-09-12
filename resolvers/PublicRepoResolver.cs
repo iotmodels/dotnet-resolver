@@ -12,7 +12,7 @@ namespace IoTModels.Resolvers
     public class PublicRepoResolver : IResolver
     {
         static WebClient wc = new WebClient();
-        static IDictionary<string, modelindexitem> index;
+        
         string modelRepoUrl;
         ILogger logger;
         public PublicRepoResolver(IConfiguration config, ILogger log)
@@ -23,10 +23,6 @@ namespace IoTModels.Resolvers
             {
                 modelRepoUrl = "https://iotmodels.github.io/registry/";
             }
-            Console.Write("Downloading Index from " + modelRepoUrl);
-            var modelIndexJson = wc.DownloadString(modelRepoUrl + "model-index.json");
-            index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(modelIndexJson);
-            Console.WriteLine(".. Loaded !!");
         }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
@@ -34,12 +30,10 @@ namespace IoTModels.Resolvers
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)
             {
-                if (index.ContainsKey(dtmi.AbsoluteUri))
-                {
-                    string url = modelRepoUrl + index[dtmi.AbsoluteUri].path;
-                    resolvedModels.Add(wc.DownloadString(url));
-                    logger.LogTrace("OK " + url);
-                }
+                var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
+                string url = modelRepoUrl + path;
+                resolvedModels.Add(wc.DownloadString(url));
+                logger.LogTrace("OK " + url);
             }
             return await Task.FromResult(resolvedModels);
         }

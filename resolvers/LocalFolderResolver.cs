@@ -21,7 +21,7 @@ namespace IoTModels.Resolvers
             var baseFolder = config.GetValue<string>("baseFolder");
             if (string.IsNullOrEmpty(baseFolder))
             {
-                baseFolder = "models";
+                baseFolder = "dtmi";
             }
             if (!Directory.Exists(baseFolder))
             {
@@ -42,8 +42,11 @@ namespace IoTModels.Resolvers
             {
                 (string dtmi, string content) = SemiParse(file.FullName);
                 // TODO: handle dependencies
-                index.Add(dtmi, content);
-                logger.LogTrace($"{dtmi} in {di.FullName}");
+                if (!index.ContainsKey(dtmi))
+                {
+                    index.Add(dtmi, content);
+                    logger.LogTrace($"{dtmi} in {di.FullName}");
+                }
             }
 
             foreach (var subfolder in di.EnumerateDirectories())

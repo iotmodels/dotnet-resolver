@@ -17,7 +17,6 @@ namespace IoTModels.Resolvers
     {
         string storageConnectionString;
         BlobContainerClient containerClient;
-        IDictionary<string, modelindexitem> index;
         ILogger logger;
         public PrivateRepoResolver(IConfiguration config, ILogger log)
         {
@@ -35,13 +34,6 @@ namespace IoTModels.Resolvers
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
             containerClient = blobServiceClient.GetBlobContainerClient("models");
-            Console.Write("Downloading Index from " + containerClient.AccountName);
-            var dlIndex = await containerClient.GetBlobClient("model-index.json").DownloadAsync();
-            using (var sr = new StreamReader(dlIndex.Value.Content))
-            {
-                index = JsonConvert.DeserializeObject<IDictionary<string, modelindexitem>>(sr.ReadToEnd());
-                Console.WriteLine(".. Loaded !!");
-            }
         }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
@@ -49,16 +41,15 @@ namespace IoTModels.Resolvers
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)
             {
-                if (index.ContainsKey(dtmi.AbsoluteUri))
-                {
-                    string path = index[dtmi.AbsoluteUri].path;
+                
+                    string path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
                     var dlModel = await containerClient.GetBlobClient(path).DownloadAsync();
                     using (var sr = new StreamReader(dlModel.Value.Content))
                     {
                         resolvedModels.Add(sr.ReadToEnd());
                     }
                     logger.LogTrace("OK " + path);
-                }
+                
             }
             return await Task.FromResult(resolvedModels);
         }
