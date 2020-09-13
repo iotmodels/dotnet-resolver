@@ -17,22 +17,24 @@ namespace dtdl2_validator
     {
         readonly ILogger log;
         readonly IConfiguration config;
+        private readonly IHostApplicationLifetime applicationLifetime;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger, IHostApplicationLifetime applicationLifetime)
         {
             this.log = logger;
             this.config = configuration;
+            this.applicationLifetime = applicationLifetime;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
-            int res = await ValidateAsync(input, resolverName);
-            Environment.ExitCode = res;
+            await ValidateAsync(input, resolverName);
+            
         }
 
-        private async Task<int> ValidateAsync(string input, string resolverName)
+        private async Task ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
             ConfigureResolver(parser, resolverName);
@@ -47,12 +49,16 @@ namespace dtdl2_validator
                     this.log.LogTrace(item.Id.AbsoluteUri);
                 }
                 Console.WriteLine($"\nValidation Passed: {input}");
-                return 0;
             } 
             catch (Exception ex)
             {
                 log.LogError(ex, "DTDL Parser Exception");
-                return 1;
+
+                Environment.ExitCode = 1;
+            }
+            finally
+            {
+                applicationLifetime.StopApplication();
             }
         }
 
@@ -91,14 +97,14 @@ namespace dtdl2_validator
             if (string.IsNullOrEmpty(input))
             {
                 Console.WriteLine("Usage: dtdl2-validator /f=<dtdlFile.json> /resolver?=<public|private|local|none>");
-                Environment.ExitCode = -1;
+                Environment.ExitCode = 2;
             }
             else
             {
                 if (!File.Exists(input))
                 {
                     Console.WriteLine($"File '{input}' not found");
-                    Environment.ExitCode = -1;
+                    Environment.ExitCode = 2;
                 }
             }
 
