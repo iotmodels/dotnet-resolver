@@ -2,7 +2,6 @@
 using IoTModels.Resolvers;
 using Microsoft.Azure.DigitalTwins.Parser;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,33 +12,30 @@ using System.Threading.Tasks;
 
 namespace dtdl2_validator
 {
-    class ModelValidationService : BackgroundService
+    class ModelValidationService 
     {
         readonly ILogger log;
         readonly IConfiguration config;
-        private readonly IHostApplicationLifetime applicationLifetime;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger, IHostApplicationLifetime applicationLifetime)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
         {
             this.log = logger;
             this.config = configuration;
-            this.applicationLifetime = applicationLifetime;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
             await ValidateAsync(input, resolverName);
-            
         }
 
         private async Task ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
+            parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
             ConfigureResolver(parser, resolverName);
 
-            parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
             try
             {
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
@@ -52,14 +48,11 @@ namespace dtdl2_validator
             } 
             catch (Exception ex)
             {
+                Environment.ExitCode =1;
+                Console.WriteLine(ex.ToString());
                 log.LogError(ex, "DTDL Parser Exception");
-
-                Environment.ExitCode = 1;
             }
-            finally
-            {
-                applicationLifetime.StopApplication();
-            }
+            
         }
 
         private void ConfigureResolver(ModelParser parser, string resolverName)
@@ -68,7 +61,7 @@ namespace dtdl2_validator
             {
                 if (resolverName == "local")
                 {
-                    parser.DtmiResolver = new LocalFolderResolver(config, log).DtmiResolver;
+                    parser.DtmiResolver = new LocalFSResolver(config, log).DtmiResolver;
                 }
                 else if (resolverName == "private")
                 {

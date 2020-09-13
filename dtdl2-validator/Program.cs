@@ -1,23 +1,32 @@
-﻿using IoTModels.Resolvers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Security.AccessControl;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace dtdl2_validator
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             var cancellationTokenSource = new CancellationTokenSource(5000);
-            var host = Host.CreateDefaultBuilder(args)
-              .ConfigureServices((hostContext, services) =>
-              {
-                  services.AddHostedService<ModelValidationService>();
-              });
-            await host.RunConsoleAsync(cancellationTokenSource.Token).ConfigureAwait(true);
+
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
+            
+            ILogger<ModelValidationService> logger = LoggerFactory.Create(builder =>
+                builder
+                .AddConfiguration(config.GetSection("Logging"))
+                .AddDebug()
+                .AddConsole()
+            ).CreateLogger<ModelValidationService>();
+
+            var validator = new ModelValidationService(config, logger);
+            validator.ExecuteAsync(cancellationTokenSource.Token).Wait();
         }
+
+
     }
 }

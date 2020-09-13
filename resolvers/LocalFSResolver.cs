@@ -4,23 +4,25 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
 {
-    public class PublicRepoResolver : IResolver
+    public class LocalFSResolver : IResolver
     {
-        string modelRepoUrl;
+        string baseFolder;
         ILogger logger;
-        public PublicRepoResolver(IConfiguration config, ILogger log)
+        public LocalFSResolver(IConfiguration config, ILogger log)
         {
             logger = log;
-            modelRepoUrl = config.GetValue<string>("modelRepoUrl");
-            if (string.IsNullOrEmpty(modelRepoUrl))
+            baseFolder = config.GetValue<string>("baseFolder");
+            if (string.IsNullOrEmpty(baseFolder))
             {
-                modelRepoUrl = "https://iotmodels.github.io/registry/";
+                baseFolder = ".";
             }
         }
 
@@ -31,10 +33,15 @@ namespace IoTModels.Resolvers
             {
                 logger.LogInformation($"Resolving {dtmi.AbsoluteUri}");
                 var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
-                string url = modelRepoUrl + path;
-                logger.LogTrace("Request: " + url);
-                resolvedModels.Add(await Get(url));
-                logger.LogTrace("OK:" + url);
+                DirectoryInfo di = new DirectoryInfo(baseFolder);
+                string uri = di.FullName;
+                foreach(var f in path.Split('/'))
+                {
+                    uri = Path.Combine(uri, f);
+                }
+                logger.LogTrace("Reading: " + uri);
+                resolvedModels.Add(File.ReadAllText(uri));
+                logger.LogTrace("OK:" + uri);
             }
             return await Task.FromResult(resolvedModels);
         }
