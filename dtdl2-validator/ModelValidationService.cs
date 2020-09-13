@@ -1,16 +1,13 @@
 ﻿
 using IoTModels.Resolvers;
 using Microsoft.Azure.DigitalTwins.Parser;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,40 +17,43 @@ namespace dtdl2_validator
     {
         readonly ILogger log;
         readonly IConfiguration config;
-        readonly IResolver resolver;
 
         public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
         {
             this.log = logger;
             this.config = configuration;
-            this.resolver = resolver;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
-            await ValidateAsync(input, resolverName);
+            int res = await ValidateAsync(input, resolverName);
+            Environment.ExitCode = res;
         }
 
-        private async Task ValidateAsync(string input, string resolverName)
+        private async Task<int> ValidateAsync(string input, string resolverName)
         {
             ModelParser parser = new ModelParser();
             ConfigureResolver(parser, resolverName);
 
-                parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
+            parser.Options = new HashSet<ModelParsingOption>() { ModelParsingOption.StrictPartitionEnforcement };
+            try
+            {
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
                 Console.WriteLine("Resolution completed\n\n");
                 foreach (var item in parserResult.Values)
                 {
                     this.log.LogTrace(item.Id.AbsoluteUri);
-                    if (item.EntityKind == DTEntityKind.Interface
-                     || item.EntityKind == DTEntityKind.Component)
-                    {
-                        Console.WriteLine(item.Id.AbsoluteUri);
-                    }
                 }
                 Console.WriteLine($"\nValidation Passed: {input}");
+                return 0;
+            } 
+            catch (Exception ex)
+            {
+                log.LogError(ex, "DTDL Parser Exception");
+                return 1;
+            }
         }
 
         private void ConfigureResolver(ModelParser parser, string resolverName)
@@ -101,12 +101,12 @@ namespace dtdl2_validator
                     Environment.ExitCode = -1;
                 }
             }
-            
+
             if (string.IsNullOrEmpty(resolver))
             {
                 resolver = "public";
             }
-            
+
             return (input, resolver);
         }
 
