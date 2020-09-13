@@ -13,20 +13,20 @@ using System.Threading.Tasks;
 
 namespace dtdl2_validator
 {
-    class ModelValidationService : BackgroundService
+    class ModelValidationService //: BackgroundService
     {
         readonly ILogger log;
         readonly IConfiguration config;
         private readonly IHostApplicationLifetime applicationLifetime;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger, IHostApplicationLifetime applicationLifetime)
+        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
         {
             this.log = logger;
             this.config = configuration;
-            this.applicationLifetime = applicationLifetime;
+           
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
@@ -58,7 +58,7 @@ namespace dtdl2_validator
             }
             finally
             {
-                applicationLifetime.StopApplication();
+               // applicationLifetime.StopApplication();
             }
         }
 
