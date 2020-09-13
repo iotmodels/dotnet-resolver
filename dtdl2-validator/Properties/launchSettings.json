@@ -18,7 +18,7 @@
     },
     "local-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/dtmi /Logging:Console:LogLevel:Default=Trace"
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=local /baseFolder=../../../../../registry/ /Logging:LogLevel:Default=Trace"
     },
     "private-resolver": {
       "commandName": "Project",
