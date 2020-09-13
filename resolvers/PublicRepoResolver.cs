@@ -30,10 +30,12 @@ namespace IoTModels.Resolvers
             List<string> resolvedModels = new List<string>();
             foreach (var dtmi in dtmis)
             {
+                logger.LogInformation($"Resolving {dtmi.AbsoluteUri}");
                 var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
                 string url = modelRepoUrl + path;
+                logger.LogTrace("Request: " + url);
                 resolvedModels.Add(wc.DownloadString(url));
-                logger.LogTrace("OK " + url);
+                logger.LogTrace("OK:" + url);
             }
             return await Task.FromResult(resolvedModels);
         }
