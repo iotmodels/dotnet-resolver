@@ -27,7 +27,8 @@ namespace IoTModels.Resolvers
                 Console.WriteLine("ERROR: PrivateRepos require credentials via config 'StorageConnectionString'");
                 Environment.Exit(-1);
             }
-            
+            BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
+            containerClient = blobServiceClient.GetBlobContainerClient("repo");
         }
 
 
