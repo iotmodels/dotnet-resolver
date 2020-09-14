@@ -12,8 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
     - name: Pack
-      run: dotnet pack -c Release --no-restore --verbosity normal
+      run: dotnet pack -c Release --no-restore --no-build --verbosity normal
 
     - name: Add private feed
       run: dotnet nuget add source https://nuget.pkg.github.com/iotmodels/index.json -n GPR -u iotmodels -p ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
