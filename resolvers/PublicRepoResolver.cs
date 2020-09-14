@@ -20,6 +20,7 @@ namespace IoTModels.Resolvers
             modelRepoUrl = config.GetValue<string>("modelRepoUrl");
             if (string.IsNullOrEmpty(modelRepoUrl))
             {
+                log.LogInformation("PublicRepoResolver modelRepoUrl config not found, using default.");
                 modelRepoUrl = "https://iotmodels.github.io/registry/";
             }
             log.LogInformation($"PublicRepoResolver configured with modelRepoUrl={modelRepoUrl}");

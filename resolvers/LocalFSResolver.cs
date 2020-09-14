@@ -1,13 +1,8 @@
 ﻿using Microsoft.Azure.DigitalTwins.Parser;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IoTModels.Resolvers
@@ -22,6 +17,7 @@ namespace IoTModels.Resolvers
             baseFolder = config.GetValue<string>("baseFolder");
             if (string.IsNullOrEmpty(baseFolder))
             {
+                log.LogInformation("PublicRepoResolver baseFolder config not found, using default.");
                 baseFolder = ".";
             }
             log.LogInformation($"LocalFSResolver configured in '{baseFolder}'");
@@ -52,15 +48,6 @@ namespace IoTModels.Resolvers
                 }
             }
             return await Task.FromResult(resolvedModels);
-        }
-
-        async Task<string> Get(string url)
-        {
-            logger.LogInformation("GET: " + url);
-            using (var http = new HttpClient())
-            {
-                return await http.GetStringAsync(url);
-            }
         }
     }
 }

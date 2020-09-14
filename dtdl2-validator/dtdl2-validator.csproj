@@ -6,7 +6,7 @@
     <RootNamespace>dtdl2_validator</RootNamespace>
     <PackAsTool>true</PackAsTool>
     <PackageType>DotNetCliTool</PackageType>
-    <Version>0.0.9</Version>
+    <Version>0.0.10</Version>
     <Authors>ridomin</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

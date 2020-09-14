@@ -10,7 +10,7 @@
     },
     "public-resolver": {
       "commandName": "Project",
-      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public /Logging:LogLevel:Default=Information"
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public /Logging:LogLevel:Default=Trace"
     },
     "shared-resolver": {
       "commandName": "Project",
