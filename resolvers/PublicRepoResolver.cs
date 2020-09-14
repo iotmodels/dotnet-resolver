@@ -22,6 +22,7 @@ namespace IoTModels.Resolvers
             {
                 modelRepoUrl = "https://iotmodels.github.io/registry/";
             }
+            log.LogInformation($"PublicRepoResolver configured with modelRepoUrl={modelRepoUrl}");
         }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)

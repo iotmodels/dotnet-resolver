@@ -39,7 +39,7 @@ namespace dtdl2_validator
             try
             {
                 var parserResult = await parser.ParseAsync(new string[] { File.ReadAllText(input) });
-                Console.WriteLine("Resolution completed\n\n");
+                Console.WriteLine("Resolution completed");
                 foreach (var item in parserResult.Values)
                 {
                     this.log.LogTrace(item.Id.AbsoluteUri);
@@ -49,7 +49,6 @@ namespace dtdl2_validator
             catch (Exception ex)
             {
                 Environment.ExitCode =1;
-                Console.WriteLine(ex.ToString());
                 log.LogError(ex, "DTDL Parser Exception");
             }
             

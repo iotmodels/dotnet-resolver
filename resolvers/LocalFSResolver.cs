@@ -24,6 +24,7 @@ namespace IoTModels.Resolvers
             {
                 baseFolder = ".";
             }
+            log.LogInformation($"LocalFSResolver configured in '{baseFolder}'");
         }
 
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
@@ -39,9 +40,16 @@ namespace IoTModels.Resolvers
                 {
                     uri = Path.Combine(uri, f);
                 }
-                logger.LogTrace("Reading: " + uri);
-                resolvedModels.Add(File.ReadAllText(uri));
-                logger.LogTrace("OK:" + uri);
+                if (File.Exists(uri)) 
+                {
+                    logger.LogTrace("Reading: " + uri);
+                    resolvedModels.Add(File.ReadAllText(uri));
+                    logger.LogTrace("OK:" + uri);
+                }
+                else
+                {
+                    logger.LogWarning($"{dtmi.AbsoluteUri} not found in {di.FullName}");
+                }
             }
             return await Task.FromResult(resolvedModels);
         }
@@ -51,8 +59,7 @@ namespace IoTModels.Resolvers
             logger.LogInformation("GET: " + url);
             using (var http = new HttpClient())
             {
-                var data = await http.GetStringAsync(url);
-                return data;
+                return await http.GetStringAsync(url);
             }
         }
     }
