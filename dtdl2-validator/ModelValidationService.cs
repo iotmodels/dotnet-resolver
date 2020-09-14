@@ -17,7 +17,7 @@ namespace dtdl2_validator
         readonly ILogger log;
         readonly IConfiguration config;
 
-        public ModelValidationService(IConfiguration configuration, ILogger<ModelValidationService> logger)
+        public ModelValidationService(IConfiguration configuration, ILogger logger)
         {
             this.log = logger;
             this.config = configuration;
@@ -48,7 +48,7 @@ namespace dtdl2_validator
             } 
             catch (Exception ex)
             {
-                Environment.ExitCode =1;
+                Environment.ExitCode = 1;
                 log.LogError(ex, "DTDL Parser Exception");
             }
             

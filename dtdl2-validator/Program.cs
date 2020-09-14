@@ -16,7 +16,7 @@ namespace dtdl2_validator
                 .AddCommandLine(args)
                 .Build();
             
-            ILogger<ModelValidationService> logger = LoggerFactory.Create(builder =>
+            ILogger logger = LoggerFactory.Create(builder =>
                 builder
                 .AddConfiguration(config.GetSection("Logging"))
                 .AddDebug()
@@ -26,7 +26,5 @@ namespace dtdl2_validator
             var validator = new ModelValidationService(config, logger);
             validator.ExecuteAsync(cancellationTokenSource.Token).Wait();
         }
-
-
     }
 }
