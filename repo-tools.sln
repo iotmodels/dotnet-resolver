@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{91B4CF27-1
 		testExitCodes.cmd = testExitCodes.cmd
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "resolver-tests", "test\resolver-tests\resolver-tests.csproj", "{EB0B7224-06F8-443D-8230-2EA9466E2947}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{98FCBAA6-8593-47F8-9856-66E3BFFDA73F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98FCBAA6-8593-47F8-9856-66E3BFFDA73F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98FCBAA6-8593-47F8-9856-66E3BFFDA73F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0B7224-06F8-443D-8230-2EA9466E2947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0B7224-06F8-443D-8230-2EA9466E2947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0B7224-06F8-443D-8230-2EA9466E2947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0B7224-06F8-443D-8230-2EA9466E2947}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
