@@ -10,6 +10,7 @@
     <Authors>ridomin</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/iotmodels/dotnet-resolver</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
