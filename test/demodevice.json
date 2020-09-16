@@ -7,7 +7,7 @@
     {
       "@type": "Component",
       "name": "c1",
-      "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
+      "schema": "dtmi:azureiot:AzureDeviceUpdateCore;1"
     },
     {
       "@type": "Component",
