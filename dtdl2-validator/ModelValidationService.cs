@@ -66,6 +66,10 @@ namespace dtdl2_validator
                 {
                     parser.DtmiResolver = new PrivateRepoResolver(config, log).DtmiResolver;
                 }
+                else if (resolverName == "federated")
+                {
+                    parser.DtmiResolver = new Federatation(config, log).DtmiResolver;
+                }
                 else
                 {
                     parser.DtmiResolver = new PublicRepoResolver(config, log).DtmiResolver;

@@ -7,7 +7,12 @@
     {
       "@type": "Component",
       "name": "c1",
-      "schema": "dtmi:azure:DeviceManagement:DeviceInformation;11"
+      "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
+    },
+    {
+      "@type": "Component",
+      "name": "privateComp",
+      "schema": "dtmi:com:alpite:aisensoryprocessor;6"
     },
     {
       "@type": "Telemetry",

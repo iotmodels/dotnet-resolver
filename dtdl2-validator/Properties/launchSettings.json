@@ -8,6 +8,10 @@
       "commandName": "Project",
       "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=none"
     },
+    "federation": {
+      "commandName": "Project",
+      "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=federated /repoList=https://iotmodels-ghp.azureedge.net/;https://iotmodels.azureedge.net/"
+    },
     "public-resolver": {
       "commandName": "Project",
       "commandLineArgs": "/f=../../../../test/demodevice.json /resolver=public /Logging:LogLevel:Default=Trace"

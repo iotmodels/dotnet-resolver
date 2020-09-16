@@ -16,10 +16,11 @@ namespace IoTModels.Resolvers
         List<string> repoList = new List<string>();
         public Federatation(IConfiguration config, ILogger log)
         {
+            logger = log;
             var configRepolist = config.GetValue<string>("repoList");
             if (string.IsNullOrEmpty(configRepolist))
             {
-                log.LogWarning("Config 'repoList' not found, using default public repo.");
+                logger.LogWarning("Config 'repoList' not found, using default public repo.");
                 repoList.Add("https://iotmodels.github.io/registry");
             }
             else
@@ -30,20 +31,25 @@ namespace IoTModels.Resolvers
         public async Task<IEnumerable<string>> DtmiResolver(IReadOnlyCollection<Dtmi> dtmis)
         {
             List<string> resolvedModels = new List<string>();
+            List<string> knownDmtis = new List<string>();
             foreach (var dtmi in dtmis)
             {
-                logger.LogInformation($"Resolving {dtmi.AbsoluteUri}");
-                var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
-
-                foreach(string repo in repoList)
+                if (!knownDmtis.Contains(dtmi.AbsoluteUri))
                 {
-                    string url = repo + path;
-                    logger.LogTrace("Request: " + url);
-                    if (await http.Head(url))
+                    foreach (string repo in repoList)
                     {
-                        resolvedModels.Add(await http.Get(url));
-                        logger.LogTrace("OK:" + url);
-                        break;
+                        logger.LogInformation($"Resolving {dtmi.AbsoluteUri} in repo {repo}.");
+                        var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
+
+                        string url = repo + path;
+                        logger.LogTrace("Request: " + url);
+                        if (await http.Head(url, logger))
+                        {
+                            resolvedModels.Add(await http.Get(url, logger));
+                            knownDmtis.Add(dtmi.AbsoluteUri);
+                            logger.LogTrace("Found:" + url);
+                            break;
+                        }
                     }
                 }
             }
