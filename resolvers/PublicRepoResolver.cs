@@ -35,20 +35,10 @@ namespace IoTModels.Resolvers
                 var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
                 string url = modelRepoUrl + path;
                 logger.LogTrace("Request: " + url);
-                resolvedModels.Add(await Get(url));
+                resolvedModels.Add(await http.Get(url, logger));
                 logger.LogTrace("OK:" + url);
             }
             return await Task.FromResult(resolvedModels);
-        }
-
-        async Task<string> Get(string url)
-        {
-            logger.LogInformation("GET: " + url);
-            using (var http = new HttpClient())
-            {
-                var data = await http.GetStringAsync(url);
-                return data;
-            }
         }
     }
 }
