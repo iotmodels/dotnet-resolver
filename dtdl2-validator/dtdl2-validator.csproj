@@ -6,10 +6,11 @@
     <RootNamespace>dtdl2_validator</RootNamespace>
     <PackAsTool>true</PackAsTool>
     <PackageType>DotNetCliTool</PackageType>
-    <Version>0.0.10</Version>
+    <Version>0.0.11</Version>
     <Authors>ridomin</Authors>
     <Company />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/iotmodels/dotnet-resolver</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
