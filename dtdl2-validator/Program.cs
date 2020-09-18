@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace dtdl2_validator
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var cancellationTokenSource = new CancellationTokenSource(5000);
 
@@ -24,7 +25,8 @@ namespace dtdl2_validator
             ).CreateLogger<ModelValidationService>();
 
             var validator = new ModelValidationService(config, logger);
-            validator.ExecuteAsync(cancellationTokenSource.Token).Wait();
+            await validator.ExecuteAsync(cancellationTokenSource.Token);
+            
         }
     }
 }
