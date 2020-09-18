@@ -39,8 +39,10 @@ namespace IoTModels.Resolvers
                     foreach (string repo in repoList)
                     {
                         logger.LogInformation($"Resolving {dtmi.AbsoluteUri} in repo {repo}.");
-                        string url = repo + DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
+                        var path = DtmiConvention.Dtmi2Path(dtmi.AbsoluteUri);
 
+                        string url = repo + path;
+                        logger.LogTrace("Request: " + url);
                         if (await http.Head(url, logger))
                         {
                             resolvedModels.Add(await http.Get(url, logger));
@@ -48,12 +50,6 @@ namespace IoTModels.Resolvers
                             logger.LogTrace("Found:" + url);
                             break;
                         }
-                        else
-                        {
-                            logger.LogTrace("Not Found:" + url);
-                        }
-                            
-
                     }
                 }
             }

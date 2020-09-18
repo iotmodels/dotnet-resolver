@@ -15,6 +15,11 @@
       "schema": "dtmi:com:alpite:aisensoryprocessor;6"
     },
     {
+      "@type": "Component",
+      "name": "privateComp",
+      "schema": "dtmi:com:alpite:aisensoryprocessor;6"
+    },
+    {
       "@type": "Telemetry",
       "name": "temperature",
       "schema": "double"
