@@ -28,6 +28,7 @@ namespace dtdl2_validator
             (string input, string resolverName) = ReadConfiguration(config);
             PrintHeader(input, resolverName);
             await ValidateAsync(input, resolverName);
+            await Task.Delay(500);
         }
 
         private async Task ValidateAsync(string input, string resolverName)
